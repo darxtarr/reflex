@@ -72,10 +72,10 @@ Delay is more predictable from arrival rate than threshold.
 
 ## Artifacts
 
-- `forge/gen_synthetic_telemetry_chronome.py` — Traffic generator
-- `forge/oracle_chronome_empirical.py` — Empirical oracle (24 configs)
-- `forge/trainer_chronome.py` — Two-output trainer
-- `forge/validate_chronome.py` — Validation harness
+- `reflex_forge_gen_synthetic_telemetry_chronome.py` — Traffic generator
+- `reflex_forge_oracle_chronome_empirical.py` — Empirical oracle (24 configs)
+- `reflex_forge_trainer_chronome.py` — Two-output trainer
+- `reflex_forge_validate_chronome.py` — Validation harness
 - `data/models/chronome.reflex` — 5.3 KB model
 - `data/telemetry/chronome-labeled.csv` — 2000 labeled samples
 

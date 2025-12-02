@@ -266,8 +266,8 @@ impl ChronomeSimulator {
 - Little's Law: L = λW
 - TCP_CORK, TCP_NODELAY socket options
 - CHORUS architecture: `chorus/ARCHITECTURE.md`
-- Thread pool empirical methodology: `docs/reports/empirical-oracle-findings.md`
-- Sensorium adaptive sampling: `docs/reports/sensorium-findings.md`
+- Thread pool empirical methodology: `reflex_doc_report_empirical_oracle_findings.md`
+- Sensorium adaptive sampling: `reflex_doc_report_sensorium_findings.md`
 
 ---
 

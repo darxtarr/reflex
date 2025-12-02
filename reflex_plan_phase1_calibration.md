@@ -52,11 +52,11 @@ Duration: ≈ 2 weeks (one per day, with weekends for analysis).
    - Plot CDF and time-series  
    - 1-paragraph interpretation
 
-7. **Artifacts to Commit**  
-   - `data/telemetry/<reflex>.csv`  
-   - `models/<reflex>.reflex`  
-   - `runs/YYYYMMDD/<reflex>/metrics.json`  
-   - `docs/reports/<reflex>.md`
+7. **Artifacts to Commit**
+   - `data/telemetry/<reflex>.csv`
+   - `models/<reflex>.reflex`
+   - `runs/YYYYMMDD/<reflex>/metrics.json`
+   - `reflex_doc_report_<reflex>.md`
 
 ---
 
@@ -84,7 +84,7 @@ Duration: ≈ 2 weeks (one per day, with weekends for analysis).
 ---
 
 ### 📦 Deliverable
-`reports/SEVEN_SEEDS_SUMMARY.md`  
+`reflex_doc_report_seven_seeds_summary.md`
 For each seed:  model stats + performance gains + stability notes + insight on transferability.
 
 > Completion of Phase 1 → Tag `v0.3.0-SevenSeeds`.

@@ -148,10 +148,10 @@ Despite oracle bias, **the infrastructure works**:
 **Created**:
 - `core/telemetry-compute/` — Compute telemetry schema
 - `sim-compute/` — Thread pool simulator
-- `forge/gen_synthetic_telemetry_compute.py` — Workload generator
-- `forge/oracle_compute.py` — Pool size oracle
-- `forge/trainer_compute.py` — Compute reflex trainer
-- `docs/11-telemetry-compute.md` — Schema spec
+- `reflex_forge_gen_synthetic_telemetry_compute.py` — Workload generator
+- `reflex_forge_oracle_compute.py` — Pool size oracle
+- `reflex_forge_trainer_compute.py` — Compute reflex trainer
+- `reflex_doc_11_telemetry_compute.md` — Schema spec
 - `data/models/thread-pool.reflex` — Trained model (325 bytes)
 - `data/models/normalizer-compute.json` — Feature normalizer
 

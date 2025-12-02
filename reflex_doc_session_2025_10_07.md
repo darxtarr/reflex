@@ -38,16 +38,16 @@ Completed two reflex experiments validating the empirical oracle methodology and
 ## Artifacts Created
 
 **Sensorium**:
-- `docs/12-telemetry-sensorium.md`
-- `forge/{gen,oracle,trainer,validate}_sensorium.py`
+- `reflex_doc_12_telemetry_sensorium.md`
+- `reflex_forge_{gen,oracle,trainer,validate}_sensorium.py`
 - `data/models/sensorium.reflex` (2466 bytes)
-- `docs/reports/sensorium-findings.md`
+- `reflex_doc_report_sensorium_findings.md`
 
 **Chronome**:
-- `docs/13-telemetry-chronome.md`
-- `forge/{gen,oracle,trainer,validate}_chronome.py`
+- `reflex_doc_13_telemetry_chronome.md`
+- `reflex_forge_{gen,oracle,trainer,validate}_chronome.py`
 - `data/models/chronome.reflex` (5274 bytes)
-- `docs/reports/chronome-findings-brief.md`
+- `reflex_doc_report_chronome_findings_brief.md`
 
 ## Phase 1 Progress: 3/7 Complete
 

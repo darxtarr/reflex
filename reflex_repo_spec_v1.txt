@@ -1,0 +1,336 @@
+# Reflex Repository Specification v1
+# LLM-native capsule format
+# Generated: 2025-12-02
+
+[project]
+name = "Reflex"
+tagline = "Reflexive Machine Learning for Systems"
+purpose = "Tiny, offline-trained models (<10KB) that replace static heuristics in performance-critical loops"
+scope = "Three empirically validated reflexes (Chronome batch control, Sensorium adaptive sampling, Thread-pool sizing) + portable telemetry schemas + .reflex binary format"
+authors = "LLM-authored (Sonnet, Veyr, Gemma); human-supervised"
+status = "Experimental (Phase 1: 3/7 Seven Seeds complete)"
+inspiration = "Kernel Machine Learning (KML) project, Stony Brook 2023-25"
+
+[crates]
+# Rust workspace structure (preserved as-is for tooling)
+core/reflex-format = "rust_lib: .reflex binary format serialization/deserialization + inspector CLI"
+core/telemetry = "rust_lib: shared base telemetry schema (Window, Feature, Decision traits)"
+core/telemetry-compute = "rust_lib: compute/thread-pool telemetry schema extension"
+sim = "rust_bin: Chronome simulator (adaptive batching for network flush timing)"
+sim-compute = "rust_bin: Thread-pool simulator with baseline/reflex/empirical modes + sweep harness"
+
+[groups]
+# Logical file clusters using flat naming
+
+docs_core = [
+  "reflex_doc_00_overview.md",
+  "reflex_doc_10_telemetry_schema.md",
+  "reflex_doc_30_reflex_format.md",
+  "reflex_doc_40_experiment_playbook.md",
+  "reflex_doc_50_forge_guide.md",
+  "reflex_doc_70_threats_to_validity.md",
+]
+
+docs_chronome = [
+  "reflex_doc_13_telemetry_chronome.md",
+  "reflex_doc_60_chronome_case.md",
+  "reflex_doc_report_chronome_findings_brief.md",
+]
+
+docs_sensorium = [
+  "reflex_doc_12_telemetry_sensorium.md",
+  "reflex_doc_report_sensorium_findings.md",
+]
+
+docs_compute = [
+  "reflex_doc_11_telemetry_compute.md",
+  "reflex_doc_report_thread_pool_v1.md",
+]
+
+docs_methodology = [
+  "reflex_doc_report_empirical_oracle_experiment.md",
+  "reflex_doc_report_empirical_oracle_findings.md",
+]
+
+docs_sessions = [
+  "reflex_doc_session_2025_10_07.md",
+]
+
+plans = [
+  "reflex_plan_phase1_calibration.md",
+  "reflex_plan_research_roadmap.md",
+]
+
+forge_core = [
+  "reflex_forge_trainer.py",
+  "reflex_forge_oracle.py",
+  "reflex_forge_export_normalizer.py",
+  "reflex_forge_gen_synthetic_telemetry.py",
+  "reflex_forge_split_telemetry.py",
+]
+
+forge_chronome = [
+  "reflex_forge_trainer_chronome.py",
+  "reflex_forge_oracle_chronome_empirical.py",
+  "reflex_forge_gen_synthetic_telemetry_chronome.py",
+  "reflex_forge_validate_chronome.py",
+]
+
+forge_sensorium = [
+  "reflex_forge_trainer_sensorium.py",
+  "reflex_forge_oracle_sensorium_empirical.py",
+  "reflex_forge_gen_synthetic_telemetry_sensorium.py",
+  "reflex_forge_validate_sensorium.py",
+]
+
+forge_compute = [
+  "reflex_forge_trainer_compute.py",
+  "reflex_forge_oracle_compute.py",
+  "reflex_forge_oracle_compute_empirical.py",
+  "reflex_forge_gen_synthetic_telemetry_compute.py",
+  "reflex_forge_merge_empirical.py",
+  "reflex_forge_parallel_empirical.sh",
+]
+
+[profiles]
+# Working sets for LLM context loading
+
+overview = {
+  include = ["docs_core", "plans"],
+  exclude = [],
+  purpose = "Understand project goals, architecture, research roadmap",
+}
+
+runtime = {
+  include = ["docs_core"],
+  extra = [
+    "core/reflex-format/src/lib.rs",
+    "core/telemetry/src/lib.rs",
+  ],
+  purpose = "Runtime format and telemetry implementation",
+}
+
+science_chronome = {
+  include = ["docs_chronome", "forge_chronome"],
+  extra = ["sim/src/main.rs", "sim/src/lib.rs"],
+  purpose = "Chronome adaptive batching reflex (network flush timing)",
+}
+
+science_sensorium = {
+  include = ["docs_sensorium", "forge_sensorium"],
+  purpose = "Sensorium adaptive sampling reflex (signal sampling rate)",
+}
+
+science_compute = {
+  include = ["docs_compute", "forge_compute"],
+  extra = [
+    "sim-compute/src/lib.rs",
+    "sim-compute/src/bin/reflex.rs",
+    "sim-compute/src/bin/baseline.rs",
+  ],
+  purpose = "Thread-pool sizing reflex (flat landscape, heuristic-saturated)",
+}
+
+methodology = {
+  include = ["docs_methodology"],
+  extra = [
+    "reflex_forge_oracle.py",
+    "reflex_forge_trainer.py",
+  ],
+  purpose = "Empirical oracle methodology and training framework",
+}
+
+full_science = {
+  include = ["docs_chronome", "docs_sensorium", "docs_compute", "docs_methodology", "forge_core"],
+  purpose = "Complete scientific context across all three reflexes",
+}
+
+[fn rf_ch_step]
+# Chronome reflex: adaptive batch delay
+role = "Chronome batch delay decision (network flush timing)"
+inputs = [
+  "win: 100ms telemetry window",
+  "features: normalized [arrival_rate, buffer_usage, flush_pressure, batch_size_mean, inter_arrival_cv, queue_depth, idle_time_ratio, flush_count, recent_latency_p95]",
+]
+outputs = [
+  "delay_ms: batch delay to apply [0, 500]",
+  "min_batch: minimum batch size threshold [1, 100]",
+]
+model = "Two decision tree regressors (scikit-learn), quantized to int16"
+guarantees = [
+  "Delay increases monotonically with arrival_rate (r=+0.707)",
+  "Outputs clamped to calibrated range",
+  "Deterministic inference <1µs",
+]
+training = [
+  "Empirical oracle: 24 config sweep (delay × min_batch grid)",
+  "2000 labeled samples from synthetic traffic",
+  "Test R²: 0.475 (threshold=0.398, delay=0.552)",
+]
+performance = [
+  "Model size: 5.3 KB (.reflex format)",
+  "Validation: -17.8% flushes, +14.5% p95 latency (over-optimized for overhead)",
+]
+status = "REFLEX-VIABLE (objective needs retuning, BETA=5-10)"
+artifact = "data/models/chronome.reflex"
+notes = "Two-output approach effective but objective function over-weighted flush reduction. Demonstrates moderate curvature landscape (58.3% oracle variance)."
+
+[fn rf_sn_step]
+# Sensorium reflex: adaptive sampling rate
+role = "Sensorium sampling rate decision (signal acquisition)"
+inputs = [
+  "win: 100ms telemetry window",
+  "features: normalized [signal_variance, snr_db, spectrum_entropy, zero_crossing_rate, rms_level, crest_factor, freq_centroid, autocorr_peak, complexity_estimate]",
+]
+outputs = [
+  "sample_rate_hz: target sampling rate [100, 10000]",
+]
+model = "Single decision tree regressor (scikit-learn), quantized to int16"
+guarantees = [
+  "Sample rate increases with signal_variance (r=+0.662)",
+  "Rate bounded by Nyquist constraint",
+  "Deterministic inference <1µs",
+]
+training = [
+  "Empirical oracle: 20 rate config sweep",
+  "2000 labeled samples from synthetic signals",
+  "Test R²: 0.582 (16.6× better than thread-pool baseline)",
+]
+performance = [
+  "Model size: 2.5 KB (.reflex format)",
+  "Validation: -3.7% objective (17.5% energy savings, +7.6% RMSE)",
+  "Top feature: signal_variance",
+]
+status = "REFLEX-VIABLE (objective well-tuned)"
+artifact = "data/models/sensorium.reflex"
+notes = "Highest R² of three reflexes. Demonstrates high-curvature landscape (76.6% oracle variance). Objective function perfectly balanced energy vs accuracy."
+
+[fn rf_tp_step]
+# Thread-pool reflex: pool size tuning
+role = "Thread-pool size decision (compute resource allocation)"
+inputs = [
+  "win: 1s telemetry window",
+  "features: normalized [arrival_rate, queue_depth, utilization, throughput, avg_latency_ms, p95_latency_ms, completions, rejections]",
+]
+outputs = [
+  "pool_size: number of worker threads [1, 64]",
+]
+model = "Single decision tree regressor (scikit-learn), quantized to int16"
+guarantees = [
+  "Pool size scales with queue_depth and arrival_rate",
+  "Outputs clamped to [1, 64]",
+  "Deterministic inference <1µs",
+]
+training = [
+  "Empirical oracle: 16 pool size configs",
+  "10000 labeled samples from synthetic workloads",
+  "Test R²: 0.035 (flat landscape)",
+]
+performance = [
+  "Model size: 325 bytes (.reflex format)",
+  "Validation: marginal improvement over fixed heuristic",
+  "Oracle variance: 0.17% (heuristic-saturated)",
+]
+status = "HEURISTIC-SATURATED (not reflex-viable)"
+artifact = "data/models/thread-pool.reflex"
+notes = "Flat landscape demonstrates domain where static heuristics already optimal. Valuable negative result establishing curvature spectrum lower bound."
+
+[curvature_spectrum]
+# Empirically discovered classification of reflex-viability
+description = "Domains classified by oracle variance and model R² — spectrum from flat (heuristic-saturated) to high-curvature (reflex-viable)"
+classification = [
+  {domain="Thread Pool", r2=0.035, variance="0.17%", class="FLAT (heuristic-saturated)", viable=false},
+  {domain="Chronome", r2=0.475, variance="58.3%", class="MODERATE (learnable, sensitive)", viable=true},
+  {domain="Sensorium", r2=0.582, variance="76.6%", class="HIGH (reflex-viable)", viable=true},
+]
+insight = "Not binary viable/flat but continuous gradient. Oracle variance predicts R². Objective function quality matters as much as landscape."
+reference = "reflex_doc_session_2025_10_07.md"
+
+[format_reflex]
+# .reflex binary format specification
+role = "Compact serialization for trained reflex models"
+schema = [
+  "Magic: 0x52_46_58 ('RFX')",
+  "Version: u8",
+  "Metadata: variable-length descriptor (JSON-encoded)",
+  "Weights: quantized int16 tree nodes / linear coefficients",
+  "Checksum: CRC32",
+]
+size_targets = [
+  "Tree models: 300B - 6KB",
+  "Linear models: <1KB",
+]
+guarantees = [
+  "Platform-independent (little-endian)",
+  "Deterministic deserialization",
+  "Instant hot-swap via atomic file replacement",
+]
+implementation = "core/reflex-format/src/lib.rs"
+inspector = "core/reflex-format/src/bin/inspect.rs"
+
+[toolchain]
+# Forge: Python-based training and validation scripts
+trainer = {
+  core = "reflex_forge_trainer.py",
+  domain_specific = ["reflex_forge_trainer_chronome.py", "reflex_forge_trainer_sensorium.py", "reflex_forge_trainer_compute.py"],
+  role = "Offline model training (scikit-learn) + .reflex export",
+}
+oracle = {
+  core = "reflex_forge_oracle.py",
+  empirical = ["reflex_forge_oracle_chronome_empirical.py", "reflex_forge_oracle_sensorium_empirical.py", "reflex_forge_oracle_compute_empirical.py"],
+  role = "Empirical labeling via exhaustive config sweep",
+}
+generators = {
+  synthetic = ["reflex_forge_gen_synthetic_telemetry.py", "reflex_forge_gen_synthetic_telemetry_chronome.py", "reflex_forge_gen_synthetic_telemetry_sensorium.py", "reflex_forge_gen_synthetic_telemetry_compute.py"],
+  role = "Workload and signal generators for training data",
+}
+validation = {
+  scripts = ["reflex_forge_validate_chronome.py", "reflex_forge_validate_sensorium.py"],
+  role = "Holdout validation against empirical oracle",
+}
+
+[phase1_status]
+# Seven Seeds calibration progress
+complete = ["Thread Pool (flat)", "Sensorium (high)", "Chronome (moderate)"]
+pending = ["Storage I/O", "Graphics", "Compression", "Energy/Thermal"]
+goal = "Establish curvature spectrum across 7 diverse domains"
+deliverable = "reflex_doc_report_seven_seeds_summary.md"
+next_tag = "v0.3.0-SevenSeeds"
+
+[vocabulary]
+# Domain-specific terminology
+reflex = "Small trained model executing local control loop (analogous to biological ganglion)"
+telemetry = "Low-cost metrics sampled at 100ms-1s intervals"
+oracle = "Ground-truth labeling function (analytical or empirical sweep)"
+empirical_oracle = "Exhaustive config sweep to find optimal decision per window"
+curvature = "Degree of learnable structure in decision landscape (measured by oracle variance)"
+heuristic_saturated = "Flat landscape where static heuristics already optimal (R² < 0.1)"
+reflex_viable = "High-curvature landscape where learned models outperform heuristics (R² > 0.3, variance > 5%)"
+objective_function = "Weighted combination of metrics optimized by oracle (e.g., ALPHA*energy + BETA*error)"
+normalizer = "Feature scaling parameters (min/max or z-score) exported alongside model"
+hot_swap = "Atomic replacement of .reflex file without process restart"
+
+---
+
+# Usage Notes for LLMs
+
+This capsule is the canonical reference for the Reflex project structure.
+When starting a new session:
+1. Load this spec (2-3k tokens) instead of scanning the full tree
+2. Select a [profile] for your task (e.g., science_chronome, methodology, runtime)
+3. Load only the files in that profile's include/extra lists
+4. Refer to [fn ...] entries for semantic contracts of key functions
+5. Check [phase1_status] for current research progress
+
+When modifying the codebase:
+- Keep this spec synchronized with any structural changes
+- Add new [fn ...] entries for significant functions
+- Update [groups] when files are added/removed
+- Increment version (v2, v3...) for major spec revisions
+
+File naming convention:
+- reflex_doc_*.md for documentation
+- reflex_doc_report_*.md for experiment reports
+- reflex_plan_*.md for planning/roadmap docs
+- reflex_forge_*.py for Python tooling
+- Rust crates stay in core/, sim/, sim-compute/ for cargo compatibility

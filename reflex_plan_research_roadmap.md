@@ -117,6 +117,6 @@ Each yields rapid results (<1 h training) and clear baseline comparisons.
 **Mentat Directive:**
 When a reflex experiment ends in a flat landscape (<1 % variance), mark the domain *heuristic-saturated*.
 When >5 % variance and R² > 0.3 → mark *reflex-viable*.
-Store findings in `docs/reports/<domain>-findings.md`.
+Store findings in `reflex_doc_report_<domain>_findings.md`.
 
 🪱 *End of Document*

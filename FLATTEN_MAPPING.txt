@@ -1,0 +1,61 @@
+# Reflex Phase 1: Flat Repo Migration Mapping
+# Generated: 2025-12-02
+# Purpose: Map old nested paths → new flat LLM-friendly names
+
+## Docs (docs/*.md → reflex_doc_*.md)
+docs/00-overview.md                                → reflex_doc_00_overview.md
+docs/10-telemetry-schema.md                        → reflex_doc_10_telemetry_schema.md
+docs/11-telemetry-compute.md                       → reflex_doc_11_telemetry_compute.md
+docs/12-telemetry-sensorium.md                     → reflex_doc_12_telemetry_sensorium.md
+docs/13-telemetry-chronome.md                      → reflex_doc_13_telemetry_chronome.md
+docs/20-training-notes.md                          → reflex_doc_20_training_notes.md
+docs/30-reflex-format.md                           → reflex_doc_30_reflex_format.md
+docs/40-experiment-playbook.md                     → reflex_doc_40_experiment_playbook.md
+docs/50-forge-guide.md                             → reflex_doc_50_forge_guide.md
+docs/60-chronome-case.md                           → reflex_doc_60_chronome_case.md
+docs/70-threats-to-validity.md                     → reflex_doc_70_threats_to_validity.md
+docs/SESSION_2025-10-07.md                         → reflex_doc_session_2025_10_07.md
+
+## Reports (docs/reports/*.md → reflex_doc_report_*.md)
+docs/reports/chronome-findings-brief.md            → reflex_doc_report_chronome_findings_brief.md
+docs/reports/empirical-oracle-experiment.md        → reflex_doc_report_empirical_oracle_experiment.md
+docs/reports/empirical-oracle-findings.md          → reflex_doc_report_empirical_oracle_findings.md
+docs/reports/sensorium-findings.md                 → reflex_doc_report_sensorium_findings.md
+docs/reports/thread-pool-v1.md                     → reflex_doc_report_thread_pool_v1.md
+
+## Plans (plan/*.md → reflex_plan_*.md)
+plan/PHASE1_CALIBRATION.md                         → reflex_plan_phase1_calibration.md
+plan/RESEARCH_ROADMAP.md                           → reflex_plan_research_roadmap.md
+
+## Forge Scripts (forge/*.py → reflex_forge_*.py)
+forge/export_normalizer.py                         → reflex_forge_export_normalizer.py
+forge/gen_synthetic_telemetry_chronome.py          → reflex_forge_gen_synthetic_telemetry_chronome.py
+forge/gen_synthetic_telemetry_compute.py           → reflex_forge_gen_synthetic_telemetry_compute.py
+forge/gen_synthetic_telemetry.py                   → reflex_forge_gen_synthetic_telemetry.py
+forge/gen_synthetic_telemetry_sensorium.py         → reflex_forge_gen_synthetic_telemetry_sensorium.py
+forge/merge_empirical.py                           → reflex_forge_merge_empirical.py
+forge/oracle_chronome_empirical.py                 → reflex_forge_oracle_chronome_empirical.py
+forge/oracle_compute_empirical.py                  → reflex_forge_oracle_compute_empirical.py
+forge/oracle_compute.py                            → reflex_forge_oracle_compute.py
+forge/oracle.py                                    → reflex_forge_oracle.py
+forge/oracle_sensorium_empirical.py                → reflex_forge_oracle_sensorium_empirical.py
+forge/parallel_empirical.sh                        → reflex_forge_parallel_empirical.sh
+forge/split_telemetry.py                           → reflex_forge_split_telemetry.py
+forge/trainer_chronome.py                          → reflex_forge_trainer_chronome.py
+forge/trainer_compute.py                           → reflex_forge_trainer_compute.py
+forge/trainer.py                                   → reflex_forge_trainer.py
+forge/trainer_sensorium.py                         → reflex_forge_trainer_sensorium.py
+forge/validate_chronome.py                         → reflex_forge_validate_chronome.py
+forge/validate_sensorium.py                        → reflex_forge_validate_sensorium.py
+
+## Summary
+Total files to move: 40
+  - Docs: 12
+  - Reports: 5
+  - Plans: 2
+  - Forge scripts: 21 (19 .py + 2 .sh)
+
+## Unchanged
+- Rust workspace structure (core/, sim/, sim-compute/) stays as-is
+- data/ directory stays as-is
+- Root files (README.md, LICENSE, Cargo.toml, requirements.txt, etc.) stay as-is

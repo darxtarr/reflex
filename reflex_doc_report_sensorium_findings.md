@@ -244,10 +244,10 @@ Each Sensorium ganglion can:
 
 ### Code
 
-- `forge/gen_synthetic_telemetry_sensorium.py` — Signal generator
-- `forge/oracle_sensorium_empirical.py` — Empirical oracle
-- `forge/trainer_sensorium.py` — Decision tree trainer
-- `forge/validate_sensorium.py` — Validation script
+- `reflex_forge_gen_synthetic_telemetry_sensorium.py` — Signal generator
+- `reflex_forge_oracle_sensorium_empirical.py` — Empirical oracle
+- `reflex_forge_trainer_sensorium.py` — Decision tree trainer
+- `reflex_forge_validate_sensorium.py` — Validation script
 
 ### Data
 
@@ -258,8 +258,8 @@ Each Sensorium ganglion can:
 
 ### Documentation
 
-- `docs/12-telemetry-sensorium.md` — Telemetry schema specification
-- `docs/reports/sensorium-findings.md` — This report
+- `reflex_doc_12_telemetry_sensorium.md` — Telemetry schema specification
+- `reflex_doc_report_sensorium_findings.md` — This report
 
 ---
 

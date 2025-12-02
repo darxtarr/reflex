@@ -132,7 +132,7 @@ Each Sensorium ganglion can load a `.reflex` model and optimize its own power-qu
 - Shannon-Nyquist sampling theorem
 - Compressive sensing literature
 - Rate-distortion theory (Cover & Thomas)
-- Thread pool empirical oracle methodology (docs/reports/empirical-oracle-findings.md)
+- Thread pool empirical oracle methodology (reflex_doc_report_empirical_oracle_findings.md)
 
 ---
 
